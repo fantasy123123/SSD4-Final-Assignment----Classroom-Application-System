@@ -6,10 +6,7 @@ import {
   TableColumnProps,
 } from '@arco-design/web-react';
 import { useEffect, useState } from 'react';
-import AgainAlert from '@/routes/MainPage/component/MenuItems/ResourcePage/commonent/alert/AgainAlert';
-import CancelAlert from '@/routes/MainPage/component/MenuItems/ResourcePage/commonent/alert/CancelAlert';
-import WhyAlert from '@/routes/MainPage/component/MenuItems/ResourcePage/commonent/alert/WhyAlert';
-import DeleteAlert from '@/routes/MainPage/component/MenuItems/ResourcePage/commonent/alert/DeleteAlert';
+import AdminDeleteAlert from '@/routes/MainPage/component/MenuItems/ResourcePage/commonent/alert/AdminDeleteAlert';
 
 const initData = [
   {
@@ -20,6 +17,7 @@ const initData = [
     reason: '考试',
     person: '顾夏',
     status: '已通过',
+    why: '缘由合理，准许通过',
   },
   {
     key: 2,
@@ -29,7 +27,7 @@ const initData = [
     reason: '考试',
     person: '顾夏',
     status: '未通过',
-    why: '原因',
+    why: '未通过原因',
   },
   {
     key: 3,
@@ -39,6 +37,7 @@ const initData = [
     reason: '考试',
     person: '顾夏',
     status: '已通过',
+    why: '缘由合理，准许通过',
   },
   {
     key: 4,
@@ -48,7 +47,7 @@ const initData = [
     reason: '考试',
     person: '顾夏',
     status: '未通过',
-    why: '原因',
+    why: '未通过原因',
   },
   {
     key: 5,
@@ -58,6 +57,7 @@ const initData = [
     reason: '考试',
     person: '顾夏',
     status: '已通过',
+    why: '缘由合理，准许通过',
   },
   {
     key: 6,
@@ -67,7 +67,7 @@ const initData = [
     reason: '考试',
     person: '顾夏',
     status: '未通过',
-    why: '原因',
+    why: '未通过原因',
   },
   {
     key: 7,
@@ -77,6 +77,7 @@ const initData = [
     reason: '考试',
     person: '顾夏',
     status: '已通过',
+    why: '缘由合理，准许通过',
   },
   {
     key: 8,
@@ -86,25 +87,24 @@ const initData = [
     reason: '考试',
     person: '顾夏',
     status: '未通过',
-    why: '原因',
+    why: '未通过原因',
   },
 ];
 
-const DoneClass = () => {
+const AdminViewCheckedClass = () => {
   const [data, setData] = useState(initData);
   const [showData, setShowData] = useState(data);
-
   const [deleteAlert, setDeleteAlert] = useState(false);
-  const [cancelAlert, setCancelAlert] = useState(false);
-  const [whyAlert, setWhyAlert] = useState(false);
-  const [againAlert, setAgainAlert] = useState(false);
   const [alertData, setAlertData] = useState({});
 
   const [pass, setPass] = useState(false);
   const [notPass, setNotPass] = useState(false);
-  const [cancel, setCancel] = useState(false);
 
   const columns: TableColumnProps[] = [
+    {
+      title: '借记人',
+      dataIndex: 'person',
+    },
     {
       title: '教室',
       dataIndex: 'class',
@@ -134,12 +134,8 @@ const DoneClass = () => {
       },
     },
     {
-      title: '原因',
+      title: '缘由',
       dataIndex: 'reason',
-    },
-    {
-      title: '借记人',
-      dataIndex: 'person',
     },
     {
       title: '状态',
@@ -149,55 +145,13 @@ const DoneClass = () => {
           return <span style={{ color: 'green' }}>{value.status}</span>;
         } else if (value.status === '未通过') {
           return <span style={{ color: 'red' }}>{value.status}</span>;
-        } else if (value.status === '已取消借记') {
-          return <span style={{ color: 'gray' }}>{value.status}</span>;
         }
         return null;
       },
     },
     {
-      title: '操作',
-      render: (col, value) => {
-        if (value.status === '已通过') {
-          return (
-            <Button
-              type={'primary'}
-              onClick={() => {
-                setCancelAlert(true);
-                setAlertData(value);
-              }}
-            >
-              取消申请
-            </Button>
-          );
-        } else if (value.status === '未通过') {
-          return (
-            <Button
-              type={'primary'}
-              status={'warning'}
-              onClick={() => {
-                setWhyAlert(true);
-                setAlertData(value);
-              }}
-            >
-              查看原因
-            </Button>
-          );
-        } else if (value.status === '已取消借记') {
-          return (
-            <Button
-              status={'warning'}
-              onClick={() => {
-                setAgainAlert(true);
-                setAlertData(value);
-              }}
-            >
-              重新申请
-            </Button>
-          );
-        }
-        return null;
-      },
+      title: '审核结果原因',
+      dataIndex: 'why',
     },
     {
       title: '删除记录',
@@ -218,7 +172,7 @@ const DoneClass = () => {
   ];
 
   useEffect(() => {
-    if (!cancel && !pass && !notPass) {
+    if (!pass && !notPass) {
       setShowData([...data]);
     } else {
       const tempData = [];
@@ -239,24 +193,13 @@ const DoneClass = () => {
         });
       }
 
-      if (cancel) {
-        data.forEach(value => {
-          if (value.status === '已取消借记') {
-            tempData.push(value);
-          }
-        });
-      }
-
       setShowData([...tempData]);
     }
-  }, [cancel, pass, notPass, deleteAlert, whyAlert, againAlert, cancelAlert]);
+  }, [pass, notPass, deleteAlert]);
 
   function closeAlert() {
     setAlertData({});
     setDeleteAlert(false);
-    setCancelAlert(false);
-    setWhyAlert(false);
-    setAgainAlert(false);
   }
 
   function deleteClass(key) {
@@ -267,16 +210,6 @@ const DoneClass = () => {
       }
     });
     data.splice(tempIndex, 1);
-    setData([...data]);
-    setShowData([...data]);
-  }
-
-  function changeStatus(key) {
-    data.forEach(value => {
-      if (value.key === key) {
-        value.status = '已取消借记';
-      }
-    });
     setData([...data]);
     setShowData([...data]);
   }
@@ -312,14 +245,6 @@ const DoneClass = () => {
           >
             未通过
           </Checkbox>
-          <Checkbox
-            style={{ marginRight: 20 }}
-            onChange={() => {
-              setCancel(!cancel);
-            }}
-          >
-            已取消借记
-          </Checkbox>
         </div>
       </div>
 
@@ -340,78 +265,6 @@ const DoneClass = () => {
         }}
       />
 
-      {againAlert ? (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            backgroundColor: 'rbga(0,0,0,0)',
-          }}
-        >
-          <Alert
-            style={{ position: 'fixed', top: 0, left: 565, width: 500 }}
-            type="info"
-            title="请确认是否重新申请："
-            content={
-              <AgainAlert
-                alertData={alertData}
-                closeAlert={closeAlert}
-                deleteClass={deleteClass}
-              />
-            }
-          />
-        </div>
-      ) : null}
-
-      {cancelAlert ? (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            backgroundColor: 'rbga(0,0,0,0)',
-          }}
-        >
-          <Alert
-            style={{ position: 'fixed', top: 0, left: 565, width: 500 }}
-            type="info"
-            title="请确认是否取消申请："
-            content={
-              <CancelAlert
-                alertData={alertData}
-                closeAlert={closeAlert}
-                changeStatus={changeStatus}
-              />
-            }
-          />
-        </div>
-      ) : null}
-
-      {whyAlert ? (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            backgroundColor: 'rbga(0,0,0,0)',
-          }}
-        >
-          <Alert
-            style={{ position: 'fixed', top: 0, left: 565, width: 500 }}
-            type="info"
-            title="查看原因："
-            content={<WhyAlert alertData={alertData} closeAlert={closeAlert} />}
-          />
-        </div>
-      ) : null}
-
       {deleteAlert ? (
         <div
           style={{
@@ -428,7 +281,7 @@ const DoneClass = () => {
             type="info"
             title="请确认是否删除该记录："
             content={
-              <DeleteAlert
+              <AdminDeleteAlert
                 alertData={alertData}
                 closeAlert={closeAlert}
                 deleteClass={deleteClass}
@@ -441,4 +294,4 @@ const DoneClass = () => {
   );
 };
 
-export default DoneClass;
+export default AdminViewCheckedClass;

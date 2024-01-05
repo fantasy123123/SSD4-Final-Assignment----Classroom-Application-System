@@ -1,6 +1,6 @@
 import { Alert, Button, Table, TableColumnProps } from '@arco-design/web-react';
 import { useState } from 'react';
-import CheckAlert from '@/routes/MainPage/component/MenuItems/ResourcePage/commonent/alert/CheckAlert';
+import AdminCheckAlert from '@/routes/MainPage/component/MenuItems/ResourcePage/commonent/alert/AdminCheckAlert';
 
 const initData = [
   {
@@ -10,7 +10,7 @@ const initData = [
     timePeriod: ['8：00~9：40', '10：00~11：40'],
     reason: '考试',
     person: '顾夏',
-    status: '审核中',
+    status: '待审核',
   },
   {
     key: 2,
@@ -19,7 +19,7 @@ const initData = [
     timePeriod: ['8：00~9：40', '10：00~11：40'],
     reason: '考试',
     person: '顾夏',
-    status: '审核中',
+    status: '待审核',
   },
   {
     key: 3,
@@ -28,7 +28,7 @@ const initData = [
     timePeriod: ['8：00~9：40', '10：00~11：40'],
     reason: '考试',
     person: '顾夏',
-    status: '审核中',
+    status: '待审核',
   },
   {
     key: 4,
@@ -37,7 +37,7 @@ const initData = [
     timePeriod: ['8：00~9：40', '10：00~11：40'],
     reason: '考试',
     person: '顾夏',
-    status: '审核中',
+    status: '待审核',
   },
   {
     key: 5,
@@ -46,7 +46,7 @@ const initData = [
     timePeriod: ['8：00~9：40', '10：00~11：40'],
     reason: '考试',
     person: '顾夏',
-    status: '审核中',
+    status: '待审核',
   },
   {
     key: 6,
@@ -55,7 +55,7 @@ const initData = [
     timePeriod: ['8：00~9：40', '10：00~11：40'],
     reason: '考试',
     person: '顾夏',
-    status: '审核中',
+    status: '待审核',
   },
   {
     key: 7,
@@ -64,7 +64,7 @@ const initData = [
     timePeriod: ['8：00~9：40', '10：00~11：40'],
     reason: '考试',
     person: '顾夏',
-    status: '审核中',
+    status: '待审核',
   },
   {
     key: 8,
@@ -73,17 +73,21 @@ const initData = [
     timePeriod: ['8：00~9：40', '10：00~11：40'],
     reason: '考试',
     person: '顾夏',
-    status: '审核中',
+    status: '待审核',
   },
 ];
 
-const CheckClass = () => {
+const AdminCheckClass = () => {
   const [data, setData] = useState(initData);
 
   const [checkAlert, setCheckAlert] = useState(false);
   const [alertData, setAlertData] = useState({});
 
   const columns: TableColumnProps[] = [
+    {
+      title: '借记人',
+      dataIndex: 'person',
+    },
     {
       title: '教室',
       dataIndex: 'class',
@@ -117,10 +121,6 @@ const CheckClass = () => {
       dataIndex: 'reason',
     },
     {
-      title: '借记人',
-      dataIndex: 'person',
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       render: (col, value) => (
@@ -138,7 +138,7 @@ const CheckClass = () => {
               setAlertData(value);
             }}
           >
-            取消申请
+            审核
           </Button>
         );
       },
@@ -193,9 +193,9 @@ const CheckClass = () => {
           <Alert
             style={{ position: 'fixed', top: 0, left: 565, width: 500 }}
             type="info"
-            title="请确认是否取消申请"
+            title="请审核是否通过该申请："
             content={
-              <CheckAlert
+              <AdminCheckAlert
                 alertData={alertData}
                 closeAlert={closeAlert}
                 deleteClass={deleteClass}
@@ -208,4 +208,4 @@ const CheckClass = () => {
   );
 };
 
-export default CheckClass;
+export default AdminCheckClass;

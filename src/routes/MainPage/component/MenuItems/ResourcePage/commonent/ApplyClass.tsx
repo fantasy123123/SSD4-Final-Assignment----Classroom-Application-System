@@ -140,7 +140,7 @@ const initData = [
   },
 ];
 
-const ApplyClass = () => {
+const ApplyClass = ({ name }) => {
   const formRef = useRef();
   const [classOptions, setClassOptions] = useState(initClass);
 
@@ -307,7 +307,7 @@ const ApplyClass = () => {
           label="借记人"
           field="借记人"
           rules={[{ required: true }]}
-          initialValue={'顾夏'}
+          initialValue={name}
         >
           <Input
             placeholder="请输入借记人"
@@ -371,7 +371,7 @@ const ApplyClass = () => {
       {submitAlert ? (
         <div
           style={{
-            position: 'absolute',
+            position: 'fixed',
             top: 0,
             left: 0,
             bottom: 0,

@@ -1,10 +1,23 @@
 // 个人模块界面（总界面）
 
 import './style/MainPage.css';
+import { useState } from 'react';
 import PersonalInformation from '@/routes/MainPage/component/PersonalInformation/PersonalInformation';
 import ClassPage from '@/routes/MainPage/component/MenuItems/ResourcePage/ClassPage';
 
 const MainPage = () => {
+  const [ifLogIn, setIfLogIn] = useState(false);
+  function getIfLogIn(value) {
+    setIfLogIn(value);
+  }
+
+  const [ifAdmin, setIfAdmin] = useState(false);
+  const [name, setName] = useState('');
+  function getIfAdmin(value1, value2) {
+    setIfAdmin(value1);
+    setName(value2);
+  }
+
   return (
     <div className={'background'}>
       <div
@@ -19,19 +32,19 @@ const MainPage = () => {
         }}
       >
         <div className={'logo'} />
-        <PersonalInformation />
+        <PersonalInformation getIfLogIn={getIfLogIn} getIfAdmin={getIfAdmin} />
       </div>
       <div
         style={{
           position: 'absolute',
           left: '0',
           right: '0',
-          top: '14%',
-          bottom: '82%',
+          top: '15%',
+          bottom: '81%',
           background: '#186ff1',
         }}
       />
-      <ClassPage />
+      <ClassPage ifLogIn={ifLogIn} ifAdmin={ifAdmin} name={name} />
     </div>
   );
 };
